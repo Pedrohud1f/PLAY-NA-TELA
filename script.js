@@ -1,68 +1,118 @@
-const meusJogos = [
+// BANCO DE DADOS DE JOGOS (Adicione seus links aqui)
+const bancoJogos = [
     {
         id: 1,
         titulo: "Final CBLOL - LOUD vs PNG",
-        categoria: "LoL",
-        descricao: "A grande final do segundo split. Não perca nenhum detalhe!",
-        link: "https://youtube.com/link-da-transmissao-lol",
+        cat: "League of Legends",
+        desc: "Acompanhe a disputa épica pelo título do segundo split.",
+        link: "https://www.youtube.com/c/CBLOL", // Seu link aqui
         comprado: false
     },
     {
         id: 2,
-        titulo: "VCT Americas - SEN vs LEV",
-        categoria: "Valorant",
-        descricao: "Duelo de gigantes no Valorant Champions Tour.",
-        link: "https://twitch.tv/valorant_br",
+        titulo: "VCT Americas - LOUD vs SEN",
+        cat: "Valorant",
+        desc: "O clássico das Américas no palco principal do VCT.",
+        link: "https://www.twitch.tv/valorant_br", // Seu link aqui
         comprado: false
     }
 ];
 
-let jogoSelecionado = null;
+// NAVEGAÇÃO ENTRE LOGIN E CADASTRO
+function alternarAuth(tipo) {
+    const isLogin = tipo === 'login';
+    document.getElementById('form-login').classList.toggle('hidden', !isLogin);
+    document.getElementById('form-cadastro').classList.toggle('hidden', isLogin);
+    document.getElementById('tab-login').classList.toggle('active', isLogin);
+    document.getElementById('tab-cadastro').classList.toggle('active', !isLogin);
+    document.getElementById('auth-title').innerText = isLogin ? "Bem-vindo à Arena" : "Crie sua Conta";
+}
 
-function renderizarJogos() {
+// LÓGICA DE CADASTRO
+function cadastrar() {
+    const nomeComp = document.getElementById('c-nome').value;
+    const email = document.getElementById('c-email').value;
+    const senha = document.getElementById('c-password').value;
+
+    if (!nomeComp || !email || !senha) {
+        alert("Preencha todos os campos corretamente.");
+        return;
+    }
+
+    const primeiroNome = nomeComp.split(' ')[0];
+    const userObj = { nome: primeiroNome, email: email, senha: senha };
+    
+    localStorage.setItem('arena_user', JSON.stringify(userObj));
+    alert("Cadastro realizado! Faça login agora.");
+    alternarAuth('login');
+}
+
+// LÓGICA DE LOGIN
+function logar() {
+    const emailInput = document.getElementById('l-email').value;
+    const senhaInput = document.getElementById('l-password').value;
+    const savedUser = JSON.parse(localStorage.getItem('arena_user'));
+
+    if (savedUser && emailInput === savedUser.email && senhaInput === savedUser.senha) {
+        document.getElementById('login-screen').classList.add('hidden');
+        document.getElementById('main-content').classList.remove('hidden');
+        document.getElementById('user-name-text').innerText = savedUser.nome;
+        renderizarVitrine();
+    } else {
+        alert("Usuário não encontrado ou senha incorreta.");
+    }
+}
+
+// RENDERIZAR VITRINE
+function renderizarVitrine() {
     const container = document.getElementById('jogos-container');
     container.innerHTML = '';
-
-    meusJogos.forEach(jogo => {
+    
+    bancoJogos.forEach(jogo => {
         container.innerHTML += `
             <div class="card">
+                <div class="badge">${jogo.cat}</div>
                 <h3>${jogo.titulo}</h3>
-                <p>Categoria: ${jogo.categoria}</p>
-                <button onclick="abrirModal(${jogo.id})">Ver Detalhes</button>
+                <button class="btn-main" onclick="abrirDetalhes(${jogo.id})">Ver Evento</button>
             </div>
         `;
     });
 }
 
-function abrirModal(id) {
-    jogoSelecionado = meusJogos.find(j => j.id === id);
-    document.getElementById('modal-titulo').innerText = jogoSelecionado.titulo;
-    document.getElementById('modal-desc').innerText = jogoSelecionado.descricao;
+// MODAL E COMPRA
+let jogoAtual = null;
+
+function abrirDetalhes(id) {
+    jogoAtual = bancoJogos.find(j => j.id === id);
+    document.getElementById('modal-titulo').innerText = jogoAtual.titulo;
+    document.getElementById('modal-categoria').innerText = jogoAtual.cat;
+    document.getElementById('modal-desc').innerText = jogoAtual.desc;
     
-    const acao = document.getElementById('acao-compra');
-    const linkDiv = document.getElementById('link-desbloqueado');
-
-    if(jogoSelecionado.comprado) {
-        acao.classList.add('hidden');
-        linkDiv.classList.remove('hidden');
-        document.getElementById('link-final').href = jogoSelecionado.link;
-    } else {
-        acao.classList.remove('hidden');
-        linkDiv.classList.add('hidden');
-    }
-
+    atualizarStatusModal();
     document.getElementById('modal').classList.remove('hidden');
 }
 
-function comprarIngresso() {
-    // Simulação de compra
-    alert("Compra realizada com sucesso!");
-    jogoSelecionado.comprado = true;
-    abrirModal(jogoSelecionado.id);
+function atualizarStatusModal() {
+    if (jogoAtual.comprado) {
+        document.getElementById('area-pagamento').classList.add('hidden');
+        document.getElementById('area-link').classList.remove('hidden');
+        document.getElementById('link-final').href = jogoAtual.link;
+    } else {
+        document.getElementById('area-pagamento').classList.remove('hidden');
+        document.getElementById('area-link').classList.add('hidden');
+    }
+}
+
+function confirmarCompra() {
+    alert("Simulando integração com Pagamento...");
+    jogoAtual.comprado = true;
+    atualizarStatusModal();
 }
 
 function fecharModal() {
     document.getElementById('modal').classList.add('hidden');
 }
 
-renderizarJogos();
+function logout() {
+    location.reload();
+}
