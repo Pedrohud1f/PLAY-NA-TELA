@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eSports Tickets - LoL & Valorant</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav>
+        <div class="logo">ESPORTS<span>TICKETS</span></div>
+        <div id="user-area">
+            <button onclick="fazerLogin()">Login</button>
+        </div>
+    </nav>
+
+    <header>
+        <h1>Assista aos Melhores Jogos</h1>
+        <p>Compre seu ingresso e receba o link da transmissão na hora.</p>
+    </header>
+
+    <main id="jogos-container">
+        <!-- Os jogos serão inseridos aqui pelo JavaScript -->
+    </main>
+
+    <!-- Modal de Visualização -->
+    <div id="modal" class="hidden">
+        <div class="modal-content">
+            <h2 id="modal-titulo"></h2>
+            <p id="modal-desc"></p>
+            <div id="acao-compra">
+                <button class="btn-comprar" onclick="comprarIngresso()">Comprar Ingresso - R$ 15,00</button>
+            </div>
+            <div id="link-desbloqueado" class="hidden">
+                <p>✅ Ingresso Confirmado!</p>
+                <a href="#" id="link-final" target="_blank">Acessar Transmissão</a>
+            </div>
+            <button onclick="fecharModal()">Fechar</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
