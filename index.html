@@ -3,39 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>eSports Tickets - LoL & Valorant</title>
+    <title>Arena Tickets - eSports</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <nav>
-        <div class="logo">ESPORTS<span>TICKETS</span></div>
-        <div id="user-area">
-            <button onclick="fazerLogin()">Login</button>
+
+    <!-- TELA DE AUTENTICAÇÃO (LOGIN/CADASTRO) -->
+    <div id="login-screen" class="auth-overlay">
+        <div class="auth-box">
+            <!-- Certifique-se de ter o arquivo logo.png na mesma pasta -->
+            <img src="logo.png" alt="Sua Logo" class="main-logo" onerror="this.style.display='none'">
+            <h2 id="auth-title">Bem-vindo à Arena</h2>
+            
+            <div class="auth-tabs">
+                <button id="tab-login" class="active" onclick="alternarAuth('login')">Login</button>
+                <button id="tab-cadastro" onclick="alternarAuth('cadastro')">Cadastro</button>
+            </div>
+
+            <div id="form-login">
+                <input type="email" id="l-email" placeholder="E-mail">
+                <input type="password" id="l-password" placeholder="Senha">
+                <button class="btn-main" onclick="logar()">Entrar</button>
+            </div>
+
+            <div id="form-cadastro" class="hidden">
+                <input type="text" id="c-nome" placeholder="Nome Completo">
+                <input type="email" id="c-email" placeholder="E-mail">
+                <input type="password" id="c-password" placeholder="Senha">
+                <button class="btn-main" onclick="cadastrar()">Criar Conta</button>
+            </div>
         </div>
-    </nav>
+    </div>
 
-    <header>
-        <h1>Assista aos Melhores Jogos</h1>
-        <p>Compre seu ingresso e receba o link da transmissão na hora.</p>
-    </header>
+    <!-- ÁREA PRINCIPAL DO SITE -->
+    <div id="main-content" class="hidden">
+        <nav>
+            <img src="logo.png" alt="Logo" class="nav-logo" onerror="this.style.display='none'">
+            <div class="nav-links">
+                <span id="user-display">Olá, <strong id="user-name-text">Jogador</strong>!</span>
+                <button class="btn-outline" onclick="logout()">Sair</button>
+            </div>
+        </nav>
 
-    <main id="jogos-container">
-        <!-- Os jogos serão inseridos aqui pelo JavaScript -->
-    </main>
+        <header class="hero">
+            <h1>Transmissões Exclusivas</h1>
+            <p>Garanta seu ingresso para os melhores jogos de LoL e Valorant.</p>
+        </header>
 
-    <!-- Modal de Visualização -->
+        <main id="jogos-container">
+            <!-- Cards gerados via JS -->
+        </main>
+    </div>
+
+    <!-- MODAL DE COMPRA / LINK -->
     <div id="modal" class="hidden">
         <div class="modal-content">
             <h2 id="modal-titulo"></h2>
+            <div id="modal-categoria" class="badge"></div>
             <p id="modal-desc"></p>
-            <div id="acao-compra">
-                <button class="btn-comprar" onclick="comprarIngresso()">Comprar Ingresso - R$ 15,00</button>
+            
+            <div id="area-pagamento">
+                <p class="price">Ingresso: R$ 15,00</p>
+                <button class="btn-main" onclick="confirmarCompra()">Confirmar Compra</button>
             </div>
-            <div id="link-desbloqueado" class="hidden">
-                <p>✅ Ingresso Confirmado!</p>
-                <a href="#" id="link-final" target="_blank">Acessar Transmissão</a>
+            
+            <div id="area-link" class="hidden">
+                <div class="success-box">
+                    <p>✅ Acesso Liberado!</p>
+                    <a href="#" id="link-final" target="_blank" class="btn-watch">ASSISTIR AGORA</a>
+                </div>
             </div>
-            <button onclick="fecharModal()">Fechar</button>
+            
+            <button class="btn-close" onclick="fecharModal()">Voltar</button>
         </div>
     </div>
 
